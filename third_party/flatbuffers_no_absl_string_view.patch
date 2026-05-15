@@ -1,0 +1,42 @@
+diff --git a/include/flatbuffers/base.h b/include/flatbuffers/base.h
+index b4935e0..0e8a610 100644
+--- a/include/flatbuffers/base.h
++++ b/include/flatbuffers/base.h
+@@ -212,8 +212,8 @@
+         typedef std::experimental::string_view string_view;
+       }
+       #define FLATBUFFERS_HAS_STRING_VIEW 1
+-    // Check for absl::string_view
+-    #elif __has_include("absl/strings/string_view.h")
++    // Check for absl::string_view only when explicitly enabled.
++    #elif defined(FLATBUFFERS_USE_ABSL_STRING_VIEW) && __has_include("absl/strings/string_view.h")
+       #include "absl/strings/string_view.h"
+       namespace flatbuffers {
+         typedef absl::string_view string_view;
+@@ -226,24 +226,12 @@
+ #ifndef FLATBUFFERS_HAS_NEW_STRTOD
+-  // Modern (C++11) strtod and strtof functions are available for use.
+-  // 1) nan/inf strings as argument of strtod;
+-  // 2) hex-float  as argument of  strtod/strtof.
+-  #if (defined(_MSC_VER) && _MSC_VER >= 1900) || \
+-      (defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ >= 409)) || \
+-      (defined(__clang__))
+-    #define FLATBUFFERS_HAS_NEW_STRTOD 1
+-  #endif
++  #define FLATBUFFERS_HAS_NEW_STRTOD 1
+ #endif // !FLATBUFFERS_HAS_NEW_STRTOD
+ 
+ #ifndef FLATBUFFERS_LOCALE_INDEPENDENT
+   // Enable locale independent functions {strtof_l, strtod_l,strtoll_l, strtoull_l}.
+   // They are part of the POSIX-2008 but not part of the C/C++ standard.
+   // GCC/Clang have definition (_XOPEN_SOURCE>=700) if POSIX-2008.
+-  #if ((defined(_MSC_VER) && _MSC_VER >= 1800)            || \
+-       (defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE>=700)))
+-    #define FLATBUFFERS_LOCALE_INDEPENDENT 1
+-  #else
+-    #define FLATBUFFERS_LOCALE_INDEPENDENT 0
+-  #endif
++  #define FLATBUFFERS_LOCALE_INDEPENDENT 0
+ #endif  // !FLATBUFFERS_LOCALE_INDEPENDENT
+ 
+ // Suppress Undefined Behavior Sanitizer (recoverable only). Usage:

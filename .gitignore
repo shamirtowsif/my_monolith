@@ -70,6 +70,12 @@ target/
 
 # Bazel binary folders
 /bazel-*
+/.bazel-cache/
+/.conda-pkgs/
+/.downloads/
+/.pip-cache/
+/.tools/
+/.venv-monolith/
 /.vscode
 
 # Jupyter noteobok
@@ -77,4 +83,3 @@ target/
 
 # go
 vendor/
-

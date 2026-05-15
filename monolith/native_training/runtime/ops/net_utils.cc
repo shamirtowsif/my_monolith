@@ -19,6 +19,7 @@
 #include <cstdio>
 #include <cstring>
 #include <map>
+#include <string>
 
 namespace tensorflow {
 namespace monolith_tf {

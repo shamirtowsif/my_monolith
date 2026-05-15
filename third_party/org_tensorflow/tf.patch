@@ -494,7 +494,7 @@ diff --git a/third_party/com_google_absl_fix_mac_and_nvcc_build.patch b/third_pa
 index 6301119ab2c..f915a950b97 100644
 --- a/third_party/com_google_absl_fix_mac_and_nvcc_build.patch
 +++ b/third_party/com_google_absl_fix_mac_and_nvcc_build.patch
-@@ -308,3 +308,23 @@ index 7a53c81..159b0f0 100644
+@@ -308,3 +308,47 @@ index 7a53c81..159b0f0 100644
       visibility = ["//visibility:public"],
       deps = [
           ":civil_time",
@@ -518,6 +518,30 @@ index 6301119ab2c..f915a950b97 100644
 +     ]
 +     for cpu in cpu_configs:
 +         native.config_setting(
++diff --git a/absl/synchronization/internal/graphcycles.cc b/absl/synchronization/internal/graphcycles.cc
++index 9b9903d..ebd66a2 100644
++--- a/absl/synchronization/internal/graphcycles.cc
+++++ b/absl/synchronization/internal/graphcycles.cc
++@@ -35,6 +35,7 @@
++ 
++ #include <algorithm>
++ #include <array>
+++#include <limits>
++ #include "absl/base/internal/hide_ptr.h"
++ #include "absl/base/internal/raw_logging.h"
++ #include "absl/base/internal/spinlock.h"
++diff --git a/absl/strings/internal/str_format/extension.h b/absl/strings/internal/str_format/extension.h
++index 16dfa47..0f854ef 100644
++--- a/absl/strings/internal/str_format/extension.h
+++++ b/absl/strings/internal/str_format/extension.h
++@@ -19,6 +19,7 @@
++ #include <limits.h>
++ 
++ #include <cstddef>
+++#include <cstdint>
++ #include <cstring>
++ #include <ostream>
++ 
 diff --git a/third_party/snappy.BUILD b/third_party/snappy.BUILD
 index a2ab4924f29..77cb7ea0dff 100644
 --- a/third_party/snappy.BUILD
@@ -530,3 +554,64 @@ index a2ab4924f29..77cb7ea0dff 100644
      defines = select({
          "@org_tensorflow//tensorflow:windows": [],
          "//conditions:default": ["HAVE_SYS_UIO_H"],
+diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
+index 267f94c916d..0f4a50f9af3 100644
+--- a/tensorflow/workspace.bzl
++++ b/tensorflow/workspace.bzl
+@@ -1140,5 +1140,6 @@ def tf_repositories(path_prefix = "", tf_repo_name = ""):
+         sha256 = "1eed57bc6863190e35637290f97a20c81cfe4d9090ac0a24f3bbf08f265eb71d",
+         strip_prefix = "pybind11-2.4.3",
+         build_file = clean_dep("//third_party:pybind11.BUILD"),
++        patch_file = "@//third_party:pybind11_cstdint.patch",
+         system_build_file = clean_dep("//third_party/systemlibs:pybind11.BUILD"),
+     )
+
+diff --git a/third_party/aws/workspace.bzl b/third_party/aws/workspace.bzl
+index dca36c87e6f..ef26563fc2b 100644
+--- a/third_party/aws/workspace.bzl
++++ b/third_party/aws/workspace.bzl
+@@ -15,6 +15,7 @@ def repo():
+         sha256 = "758174f9788fed6cc1e266bcecb20bf738bd5ef1c3d646131c9ed15c2d6c5720",
+         strip_prefix = "aws-sdk-cpp-1.7.336",
+         build_file = "//third_party/aws:BUILD.bazel",
++        patch_file = "@//third_party:aws_cstdint.patch",
+     )
+ 
+     third_party_http_archive(
+ 
+diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
+index 267f94c916d..20c07a93e89 100644
+--- a/tensorflow/workspace.bzl
++++ b/tensorflow/workspace.bzl
+@@ -738,6 +738,7 @@ def tf_repositories(path_prefix = "", tf_repo_name = ""):
+         name = "boringssl",
+         sha256 = "a9c3b03657d507975a32732f04563132b4553c20747cec6dc04de475c8bdf29f",
+         strip_prefix = "boringssl-80ca9f9f6ece29ab132cce4cf807a9465a18cfac",
++        patch_file = "@//third_party:boringssl_no_werror.patch",
+         system_build_file = clean_dep("//third_party/systemlibs:boringssl.BUILD"),
+         urls = [
+             "https://storage.googleapis.com/mirror.tensorflow.org/github.com/google/boringssl/archive/80ca9f9f6ece29ab132cce4cf807a9465a18cfac.tar.gz",
+
+diff --git a/third_party/flatbuffers/workspace.bzl b/third_party/flatbuffers/workspace.bzl
+index bd3670ca446..1f1391c5c9f 100644
+--- a/third_party/flatbuffers/workspace.bzl
++++ b/third_party/flatbuffers/workspace.bzl
+@@ -12,6 +12,7 @@ def repo():
+             "https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz",
+         ],
+         build_file = "//third_party/flatbuffers:BUILD.bazel",
++        patch_file = "@//third_party:flatbuffers_no_absl_string_view.patch",
+         system_build_file = "//third_party/flatbuffers:BUILD.system",
+         delete = ["build_defs.bzl"],
+         link_files = {
+
+diff --git a/third_party/ruy/workspace.bzl b/third_party/ruy/workspace.bzl
+index c0a2c0c89bb..d469c467cb7 100644
+--- a/third_party/ruy/workspace.bzl
++++ b/third_party/ruy/workspace.bzl
+@@ -12,4 +12,5 @@ def repo():
+             "https://github.com/google/ruy/archive/5bb02fbf90824c2eb6cd7418f766c593106a332b.zip",
+         ],
+         build_file = "//third_party/ruy:BUILD",
++        patch_file = "@//third_party:ruy_limits.patch",
+     )

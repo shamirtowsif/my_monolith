@@ -27,9 +27,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 #include <sys/time.h>
-#include "glog/logging.h"
 
 #include "monolith/native_training/data/training_instance/cc/snappy_inputbuffer.h"
+
+#include "tensorflow/core/platform/errors.h"
+#include "tensorflow/core/platform/logging.h"
 
 namespace tensorflow {
 namespace io {
@@ -47,7 +49,10 @@ ByteSnappyInputBuffer::ByteSnappyInputBuffer(
   input_buffer_ = cached_mem_pool_->allocate();
   output_buffer_ = cached_mem_pool_->allocate();
   next_in_ = input_buffer_.get();
-  LOG_IF(ERROR, !ReadFromFile().ok()) << "Failed to read ahead from HDFS.";
+  Status read_status = ReadFromFile();
+  if (!read_status.ok()) {
+    LOG(ERROR) << "Failed to read ahead from HDFS: " << read_status;
+  }
 }
 
 ByteSnappyInputBuffer::~ByteSnappyInputBuffer() {

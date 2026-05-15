@@ -1,46 +1,36 @@
- Monolith
+# Monolith Local Demo
 
-## What is it?
+Trains and exports a TensorFlow-based recommendation model using sparse feature embeddings.
 
-[Monolith](https://arxiv.org/abs/2209.07663) is a deep learning framework for large scale recommendation modeling. It introduces two important features which are crucial for advanced recommendation system: 
-* collisionless embedding tables guarantees unique represeantion for different id features
-* real time training captures the latest hotspots and help users to discover new intersts rapidly
+## Run The Demo
 
-Monolith is built on the top of TensorFlow and supports batch/real-time training and serving.
+First try the prepared local run script:
 
-
-## Discussion Group
-
-### Join us at Discord
-
-https://discord.gg/QYTDeKxGMX
-
-## Quick start
-
-### Build from source
-
-Currently, we only support compilation on the Linux.
-
-First, download bazel 3.1.0
 ```bash
-wget https://github.com/bazelbuild/bazel/releases/download/3.1.0/bazel-3.1.0-installer-linux-x86_64.sh && \
-  chmod +x bazel-3.1.0-installer-linux-x86_64.sh && \
-  ./bazel-3.1.0-installer-linux-x86_64.sh && \
-  rm bazel-3.1.0-installer-linux-x86_64.sh
+bash RUN_DEMO.sh
 ```
 
-Then, prepare a python environment
+This uses the existing local Python environment, Bazel binary, and Bazel cache in this folder.
+
+## If That Does Not Work
+
+Start from a clean copy of the original project:
+
 ```bash
-pip install -U --user pip numpy wheel packaging requests opt_einsum
-pip install -U --user keras_preprocessing --no-deps
+git clone https://github.com/bytedance/monolith.git
+cd monolith
 ```
 
-Finally, you can build any target in the monolith.
-For example,
+Then run the fresh setup script:
+
 ```bash
-bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS
+bash FRESH_CLONE_SETUP_AND_RUN.sh
 ```
 
-### Demo and tutorials
+That script creates the local Python 3.8 environment, downloads Bazel 3.1.0, applies the needed compatibility fixes, installs runtime dependencies, builds the project, and runs the demo.
 
-There are a tutorial in [markdown/demo](markdown/demo) on how to run distributed async training, and few guides on how to use the `MonolithModel` API [here](markdown).  
+After the fresh setup succeeds once, future runs can use:
+
+```bash
+bash RUN_DEMO.sh
+```

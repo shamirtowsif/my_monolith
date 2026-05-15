@@ -1,0 +1,15 @@
+diff --git a/src/rdkafka_ssl.c b/src/rdkafka_ssl.c
+index 1d5b330..a86fb41 100644
+--- a/src/rdkafka_ssl.c
++++ b/src/rdkafka_ssl.c
+@@ -39,6 +39,10 @@
+ 
+ #include <openssl/x509.h>
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000
++int SSL_set1_host(SSL *s, const char *hostname);
++#endif
++
+ #if !_WIN32
+ #include <sys/types.h>
+ #include <sys/stat.h>

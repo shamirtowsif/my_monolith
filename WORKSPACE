@@ -2,6 +2,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "rules_python",
+    patch_args = ["-p1"],
+    patches = ["//third_party:rules_python_pkginfo.patch"],
     sha256 = "b6d46438523a3ec0f3cead544190ee13223a52f6a6765a29eae7b7cc24cc83a0",
     url = "https://github.com/bazelbuild/rules_python/releases/download/0.1.0/rules_python-0.1.0.tar.gz",
 )
@@ -189,11 +191,13 @@ http_archive(
 http_archive(
     name = "kafka",
     build_file = "//third_party:kafka.BUILD",
+    patch_args = ["-p1"],
     patch_cmds = [
         "rm -f src/win32_config.h",
         # TODO: Remove the fowllowing once librdkafka issue is resolved.
         """sed -i.bak '\\|rd_kafka_log(rk,|,/ exceeded);/ s/^/\\/\\//' src/rdkafka_cgrp.c""",
     ],
+    patches = ["//third_party:kafka_ssl_set1_host.patch"],
     sha256 = "f7fee59fdbf1286ec23ef0b35b2dfb41031c8727c90ced6435b8cf576f23a656",
     strip_prefix = "librdkafka-1.5.0",
     urls = [

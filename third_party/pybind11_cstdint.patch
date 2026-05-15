@@ -1,0 +1,13 @@
+diff --git a/include/pybind11/attr.h b/include/pybind11/attr.h
+index 9b73812..4a00d19 100644
+--- a/include/pybind11/attr.h
++++ b/include/pybind11/attr.h
+@@ -9,6 +9,8 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
++
+ #include "cast.h"
+ 
+ NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
